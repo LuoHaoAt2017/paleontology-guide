@@ -2,7 +2,7 @@
   "name": "luohao-tree-list",
   "version": "1.0.0",
   "description": "tree-list",
-  "main": "dist/index.js",
+  "main": "libs/luohao-tree-list.js",
   "scripts": {
     "build": "webpack --config webpack.config.prod.js",
     "build:all": "npm run build:lib && npm run build:app",
