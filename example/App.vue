@@ -22,7 +22,6 @@ export default {
         })
         .then((res) => {
           this.grid_cols = res;
-          console.log(res);
         })
         .catch((err) => {
           console.error(err);
@@ -34,7 +33,6 @@ export default {
         })
         .then((res) => {
           this.grid_data = res;
-          console.log(res);
         })
         .catch((err) => {
           console.error(err);

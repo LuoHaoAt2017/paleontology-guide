@@ -103,7 +103,7 @@ Mock.mock("/getTreeData", function(options) {
   return Mock.mock({
     "list|30": [
       {
-        id: "@idVal",
+        // id: "@idVal",
         title: "@textVal",
         age: "@numberVal",
         datetime: "@dateVal",

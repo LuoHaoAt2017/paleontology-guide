@@ -2,9 +2,6 @@
   <div class="gantt-body">
     <header>
       <div class="table_head">
-        <div class="table_head__cell" style="width: 60px; text-align: center">
-          序号
-        </div>
         <div
           v-for="(item, index) of table_cols"
           :key="index"
@@ -23,25 +20,31 @@
       <div class="table_body">
         <div v-for="(row, i) of table_data" :key="i" class="table_body__row">
           <div
-            class="table_body__row__cell"
-            style="width: 60px; text-align: center"
-          >
-            <span>{{ i + 1 }}</span>
-          </div>
-          <div
             v-for="(value, key) in row"
             :key="key"
             class="table_body__row__cell"
             :class="{ show_ellipsis: show_overflow === 'ellipsis' }"
             :style="{ width: getColWidth(key) }"
-            v-if="table_cols.find((col) => col.field === key)"
           >
-            <div
-              class="table_body__row__cell_before"
-              v-if="key === 'seq'"
-            ></div>
+            <div class="table_body__row__cell_before" v-if="key === 'title'">
+              <label class="seq">{{ i + 1 }}</label>
+            </div>
             <div class="table_body__row__cell_content">{{ value }}</div>
-            <div class="table_body__row__cell_menu"></div>
+            <div class="table_body__row__cell_menu" v-if="key === 'title'">
+              <a-popover placement="bottomLeft" :mouseLeaveDelay="0.25">
+                <template slot="content">
+                  <a-list size="small">
+                    <a-list-item>新增数据</a-list-item>
+                    <a-list-item>新增子数据</a-list-item>
+                    <a-list-item>标记为里程碑</a-list-item>
+                    <a-list-item>升级</a-list-item>
+                    <a-list-item>降级</a-list-item>
+                    <a-list-item>删除</a-list-item>
+                  </a-list>
+                </template>
+                <i class="h3yun_All ellipsis-o"></i>
+              </a-popover>
+            </div>
             <div class="table_body__row__cell_handle"></div>
           </div>
         </div>
@@ -52,8 +55,16 @@
   </div>
 </template>
 <script>
+import { Tooltip, List, Popover, Button } from "ant-design-vue";
 export default {
   name: "HelloWorld",
+  components: {
+    AButton: Button,
+    AList: List,
+    AListItem: List.Item,
+    ATooltip: Tooltip,
+    APopover: Popover,
+  },
   props: {
     table_cols: {
       required: true,
@@ -85,15 +96,20 @@ export default {
       return !!this.table_cols.find((col) => col.field === key);
     },
   },
+  data() {
+    return {
+      icons: [
+        {
+          src: require("@/assets/svg/more-o.svg"),
+          alt: "more",
+        },
+      ],
+    };
+  },
   methods: {
     getColWidth(field) {
       const cols = this.table_cols;
-      // console.log('field', field);
-      // console.log('cols', cols);
       const col = cols.find((col) => col.field === field);
-      if (field === "title") {
-        console.log("title cols", col);
-      }
       return col && col.width ? col.width + "px" : "120px";
     },
   },
@@ -118,13 +134,13 @@ export default {
     z-index: 2;
     border-bottom: 1px solid #eee;
     .table_head {
-      flex-grow: 1;
       display: flex;
       align-items: center;
       height: 100%;
       font-size: 14px;
       font-family: PingFangSC-Semibold, PingFang SC;
       font-weight: 600;
+      overflow-x: auto;
       &__cell {
         height: 100%;
         display: flex;
@@ -155,7 +171,7 @@ export default {
       }
     }
     // .chart_head {
-    //   min-width: 400px;
+    //   width: 400px;
     //   height: 100%;
     //   border-left: 1px solid #eee;
     //   background-color: aquamarine;
@@ -168,8 +184,7 @@ export default {
     display: flex;
     width: 100%;
     .table_body {
-      width: 100%;
-      overflow-x: auto;
+      overflow: auto;
       &__row {
         width: auto;
         display: flex;
@@ -191,13 +206,27 @@ export default {
           position: relative;
           &.show_ellipsis {
           }
+          &_before {
+            .seq {
+            }
+            margin-right: 10px;
+          }
           &_content {
             white-space: nowrap;
             overflow-x: hidden;
             text-overflow: ellipsis;
+            margin-right: 10px;
           }
-          &:last-child {
-            border-right: none;
+          &_menu {
+            margin: 0 5px;
+            cursor: pointer;
+            position: absolute;
+            right: 2px;
+            i {
+              transform: rotate(90deg);
+              -ms-transform: rotate(90deg);
+              -webkit-transform: rotate(90deg);
+            }
           }
           &_handle {
             width: 1px;
@@ -208,17 +237,28 @@ export default {
             bottom: 0;
             right: 0px;
           }
+          &:last-child {
+            border-right: none;
+          }
         }
       }
     }
     // .chart_body {
-    //   min-width: 400px;
+    //   width: 400px;
     //   border-left: 1px solid #eee;
     //   background-color: aquamarine;
     // }
     .divider {
       position: absolute;
     }
+  }
+  .divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: red;
+    z-index: 3;
   }
 }
 </style>
