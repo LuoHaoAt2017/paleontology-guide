@@ -1,6 +1,6 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const resolve = (param) => path.resolve(__dirname, param);
 
@@ -37,6 +37,6 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    // new CleanWebpackPlugin()
+    new CleanWebpackPlugin()
   ],
 }

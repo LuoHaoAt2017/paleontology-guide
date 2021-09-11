@@ -69,31 +69,6 @@ Mock.mock("/getTreeCols", function(options) {
       title: "数据标题",
       width: 150,
     },
-    {
-      field: "age",
-      title: "年龄",
-      width: 150,
-    },
-    {
-      field: "datetime",
-      title: "创建时间",
-      width: 150,
-    },
-    {
-      field: "address",
-      title: "地址",
-      width: 150,
-    },
-    {
-      field: "organization",
-      title: "人员多选",
-      width: 150,
-    },
-    {
-      field: "attachment",
-      title: "附件",
-      width: 150,
-    },
   ];
   return columns;
 });
@@ -103,13 +78,6 @@ Mock.mock("/getTreeData", function(options) {
   return Mock.mock({
     "list|30": [
       {
-        // id: "@idVal",
-        title: "@textVal",
-        age: "@numberVal",
-        datetime: "@dateVal",
-        address: "@addressVal",
-        organization: "@orgVal",
-        attachment: "@attachVal",
       },
     ],
   }).list;

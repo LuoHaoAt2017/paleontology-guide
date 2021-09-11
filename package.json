@@ -8,7 +8,8 @@
     "build:all": "npm run build:lib && npm run build:app",
     "build:lib": "webpack --config webpack.config.prod.js",
     "build:app": "webpack --config webpack.config.dev.js",
-    "serve": "webpack-dev-server --config webpack.config.dev.js ",
+    "start": "webpack-dev-server --config webpack.config.dev.js",
+    "serve": "nodemon ./server/index.js",
     "publish": "npm publish .",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
@@ -55,12 +56,13 @@
     "ant-design-vue": ">=1.7.6"
   },
   "dependencies": {
+    "ant-design-vue": "^1.7.6",
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "lodash": "^4.17.21",
     "vue": "^2.6.14",
     "vue-ref": "^2.0.0",
-    "axios": "^0.21.1",
-    "lodash": "^4.17.21",
-    "vuepress": "^1.8.2",
-    "ant-design-vue": "^1.7.6"
+    "vuepress": "^1.8.2"
   },
   "husky": {
     "hooks": {
