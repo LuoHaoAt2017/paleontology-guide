@@ -22,7 +22,7 @@
         <a-button type="default" @click="handleEdit(id)">编辑</a-button>
       </span>
     </a-table>
-    <a-drawer :visible="visible" title="新增任" width="100%" class="add-drawer">
+    <a-drawer :visible="visible" title="新增任" width="100%" :closable="false" class="add-drawer">
       <a-row :gutter="[10, 20]">
         <a-col span="6"><span>任务名称</span></a-col>
         <a-col span="18"> <a-input v-model="form.title"> </a-input> </a-col>
@@ -51,11 +51,12 @@
 <script>
 import { CreateTask, GetAllTask, DeleteTask } from "../apis/index";
 import moment from "moment";
+import Tree from '../../libs';
 export default {
   name: "Home",
   filters: {
     dateFormatter(value) {
-      return (value && moment(value).format("YYYY-MM-DD")) || "";
+      return (value && moment(value).format("YYYY-MM-DD HH:mm")) || "";
     },
   },
   data() {
@@ -104,8 +105,7 @@ export default {
     getAllTask() {
       GetAllTask()
         .then((res) => {
-          this.source = res.data;
-          console.log(res.data);
+          this.source =  res.data
         })
         .catch((error) => {
           console.error(error.message);
