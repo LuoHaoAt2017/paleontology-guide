@@ -3,14 +3,20 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     {
       path: '/home',
+      meta: {
+        title: 'Home'
+      },
       component: () => import('../pages/home.vue')
     },
     {
       path: '/about',
+      meta: {
+        title: 'About'
+      },
       component: () => import('../pages/about.vue')
     },
     {
@@ -19,3 +25,10 @@ export default new VueRouter({
     }
   ]
 });
+
+router.beforeEach(function(to, from, next) {
+  document.title = to.meta.title;
+  next();
+});
+
+export default router;

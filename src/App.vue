@@ -8,3 +8,8 @@ export default {
   name: 'App'
 }
 </script>
+<style lang="less">
+.app {
+  padding: 10px 10px;
+}
+</style>
