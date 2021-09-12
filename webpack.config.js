@@ -1,8 +1,6 @@
 const path = require("path");
-const { VueLoaderPlugin } = require("vue-loader");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const resolve = (param) => path.resolve(__dirname, param);
 
 module.exports = {
@@ -11,7 +9,7 @@ module.exports = {
   },
   output: {
     filename: "luohao-tree-list.js",
-    path: resolve("libs"),
+    path: resolve("dist"),
     library: "luohao-tree-list",
     libraryTarget: "umd",
   },
@@ -20,23 +18,7 @@ module.exports = {
       {
         test: /\.js$/,
         use: ["babel-loader"],
-      },
-      {
-        test: /\.vue$/,
-        loader: "vue-loader",
-      },
-      {
-        test: /\.(less|css)$/,
-        use: ["vue-style-loader", "css-loader", "less-loader"],
-      },
-      {
-        test: /\.(png|jpg)$/,
-        use: ["file-loader"],
-      },
-      {
-        test: /\.svg$/,
-        use: ["svg-loader"],
-      },
+      }
     ],
   },
   resolve: {
@@ -44,10 +26,9 @@ module.exports = {
       "@": resolve("./src"),
       "luohao-tree-list": resolve("./libs/luohao-tree-list.js"),
     },
-    extensions: [".js", ".vue"],
+    extensions: [".js"],
   },
   plugins: [
-    new VueLoaderPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: "树形列表",
