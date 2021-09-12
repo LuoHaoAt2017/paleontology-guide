@@ -1,6 +1,7 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const resolve = (param) => path.resolve(__dirname, param);
 
 module.exports = {
@@ -18,6 +19,18 @@ module.exports = {
       {
         test: /\.js$/,
         use: ["babel-loader"],
+      },
+      {
+        test: /\.vue$/,
+        use: ["vue-loader"],
+      },
+      {
+        test: /\.(css|less)$/,
+        use: ["vue-style-loader", "css-loader", "less-loader"],
+      },
+      {
+        test: /\.(jpg|png|svg)$/,
+        use: ["file-loader"],
       }
     ],
   },
@@ -36,5 +49,6 @@ module.exports = {
       favicon: resolve("./public/favicon.ico"),
       filename: "index.html",
     }),
+    new VueLoaderPlugin()
   ],
 };
