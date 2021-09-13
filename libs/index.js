@@ -1,3 +1,5 @@
+import { cloneDeep } from "lodash";
+
 export default function Tree(data) {
   this.tree = []; // 树形结构
   this.list = []; // 线性结构
@@ -39,7 +41,9 @@ Tree.prototype.build = function(parant, data) {
 Tree.prototype.flat = function() {
   for(let i = 0; i < this.tree.length; i++) {
     preOrder(this.tree[i], (node) => {
-      this.list.push(node);
+      const elem = cloneDeep(node);
+      delete elem.children;
+      this.list.push(elem);
     });
   }
 }

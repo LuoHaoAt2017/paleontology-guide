@@ -3,7 +3,7 @@
     <a-button-group style="padding: 10px 0px">
       <a-button @click="visible = true">新增</a-button>
     </a-button-group>
-    <a-table :columns="columns" :data-source="source" rowKey="id" bordered>
+    <a-table :columns="columns" :data-source="source" rowKey="id" bordered :scroll="{ y: 600 }">
       <span slot="name" slot-scope="gantt">
         {{ gantt }}
       </span>
@@ -105,7 +105,7 @@ export default {
     getAllTask() {
       GetAllTask()
         .then((res) => {
-          this.source =  res.data
+          this.formatData(res.data);
         })
         .catch((error) => {
           console.error(error.message);
@@ -143,6 +143,16 @@ export default {
         });
     },
     handleEdit(id) {},
+    formatData(data) {
+      const list = data.map(elem => ({
+        objectId: elem.id,
+        parentId: elem.parent_id,
+        ...elem
+      }));
+      const tree = new Tree(list);
+      this.source = tree.getFlatData();
+      console.table(this.source);
+    }
   },
   mounted() {
     this.getAllTask();
