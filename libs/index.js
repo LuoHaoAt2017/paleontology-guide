@@ -55,7 +55,10 @@ Tree.prototype.getTreeData = function() {
 };
 
 Tree.prototype.getFlatData = function() {
-  return this.list;
+  return this.list.map((elem, index) => ({
+    index: index,
+    ...elem
+  }));
 };
 // 节点收缩或者展开
 Tree.prototype.setCollapse = function(node, collapsed) {

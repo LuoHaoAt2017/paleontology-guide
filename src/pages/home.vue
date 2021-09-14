@@ -10,8 +10,16 @@
       bordered
       :scroll="{ y: 600 }"
     >
-      <span slot="name" slot-scope="gantt">
-        {{ gantt }}
+      <span slot="index" slot-scope="index">
+        {{ index }}
+      </span>
+      <span slot="name" slot-scope="row">
+        <span class="indent" style="display: inline-block;"  :style="{width: (row.level * 20) + 'px'}"></span>
+        <span v-if="row.hasChild" class="collapse">
+          <a-icon type="right" v-if="row.collapse" @click="onCollapse(row, false)"/>
+          <a-icon type="down" v-else @click="onCollapse(row, true)"/>
+        </span>
+        <label>{{ row.title }}</label>
       </span>
       <span slot="parent" slot-scope="parent">
         {{ (parent && parent.title) || "" }}
@@ -81,27 +89,41 @@ export default {
       },
       columns: [
         {
+          title: "序号",
+          dataIndex: "index",
+          key: "seq",
+          fixed: 'left',
+          width: 80,
+          align: 'center',
+          scopedSlots: { customRender: "index" },
+        },
+        {
           title: "任务名称",
-          dataIndex: "title",
           key: "name",
+          width: 200,
+          ellipsis: true,
           scopedSlots: { customRender: "name" },
         },
         {
           title: "父任务",
           dataIndex: "parent",
           key: "parent",
+          width: 150,
+          ellipsis: true,
           scopedSlots: { customRender: "parent" },
         },
         {
           title: "创建时间",
           dataIndex: "createdAt",
           key: "create",
+          width: 200,
           scopedSlots: { customRender: "create" },
         },
         {
           title: "修改时间",
           dataIndex: "updatedAt",
           key: "update",
+          width: 200,
           scopedSlots: { customRender: "update" },
         },
         {
@@ -112,6 +134,7 @@ export default {
         },
       ],
       source: [],
+      tree: null,
     };
   },
   methods: {
@@ -157,15 +180,20 @@ export default {
     },
     handleEdit(id) {},
     formatData(data) {
-      const list = data.map((elem) => ({
+      const list = data.map((elem, index) => ({
         objectId: elem.id,
         parentId: elem.parent_id,
         ...elem,
       }));
-      const tree = new Tree(list);
-      this.source = tree.getFlatData();
+      this.tree = new Tree(list);
+      this.source = this.tree.getFlatData();
       console.table(this.source);
     },
+    onCollapse(node, collapsed) {
+      this.tree.setCollapse(node, collapsed);
+      this.source = this.tree.getFlatData();
+      console.table(this.source);
+    }
   },
   mounted() {
     this.getAllTask();
@@ -181,6 +209,15 @@ export default {
       bottom: 20px;
       right: 20px;
     }
+  }
+}
+</style>
+<style lang="less" scoped>
+.home {
+  .collapse {
+    font-size: 12px;
+    transform: scale(0.5, 0.5);
+    cursor: pointer;
   }
 }
 </style>
