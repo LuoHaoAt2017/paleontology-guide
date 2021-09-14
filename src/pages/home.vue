@@ -11,11 +11,14 @@
       </a-button-group>
     </div>
     <a-table
+      rowKey="id"
       :columns="columns"
       :data-source="source"
-      rowKey="id"
-      bordered
-      :scroll="{ y: 540 }"
+      :pagination="false"
+      :bordered="false"
+      :scroll="{
+        y: 640
+      }"
     >
       <span slot="index" slot-scope="index">
         {{ index + 1 }}
