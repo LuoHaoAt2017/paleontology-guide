@@ -8,8 +8,8 @@ module.exports = {
     const params = {
       title: req.body.title
     };
-    if (req.body.parent) {
-      params.parent_id = req.body.parent;
+    if (req.body.parentId) {
+      params.parent_id = req.body.parentId;
     }
     try {
       const gantt = await Gantt.create(params);
@@ -30,7 +30,7 @@ module.exports = {
       await task.destroy();
       res.status(200).send('删除成功');
     } catch(error) {
-      res.status(500).send(error.message);
+      res.status(500).send(error);
     }
   },
   async search(req, res) {
@@ -57,14 +57,14 @@ module.exports = {
       const task = await Gantt.findByPk(req.body.id);
       if (task) {
         task.title = req.body.title;
-        task.parent_id = req.body.parent;
+        task.parent_id = req.body.parentId || '';
         await task.save();
         res.status(200).send('更新成功');
       } else {
         res.status(404).send('传递的参数有问题');
       }
-    } catch(err) {
-      res.status(500).send('更新失败');
+    } catch(error) {
+      res.status(500).send(error);
     }
   },
 }

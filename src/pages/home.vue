@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <a-button-group style="padding: 10px 0px">
-      <a-button @click="handleCreate">新增</a-button>
+      <a-button @click="handleCreate('')">新增</a-button>
     </a-button-group>
     <a-table
       :columns="columns"
@@ -30,7 +30,9 @@
         <label>{{ row.title }}</label>
       </span>
       <span slot="parent" slot-scope="parent">
-        <a-button type="link" @click="handleDetail(parent.id)">{{ (parent && parent.title) || "" }}</a-button>
+        <a-button type="link" @click="handleDetail(parent.id)">{{
+          (parent && parent.title) || ""
+        }}</a-button>
       </span>
       <span slot="create" slot-scope="create">
         {{ create | dateFormatter }}
@@ -39,16 +41,44 @@
         {{ update | dateFormatter }}
       </span>
       <span slot="operation" slot-scope="id">
-        <a-button type="primary" @click="handleDetail(id)" style="margin-right: 10px;">查看</a-button>
+        <a-button
+          type="primary"
+          @click="handleDetail(id)"
+          style="margin-right: 10px"
+          >查看</a-button
+        >
         <a-popconfirm
           title="你确定要删除这条数据吗"
           ok-text="确定"
           cancel-text="取消"
           @confirm="handleDelete(id)"
         >
-          <a-button type="danger" style="margin-right: 10px;">删除</a-button>
+          <a-button type="danger" style="margin-right: 10px">删除</a-button>
         </a-popconfirm>
-        <a-button type="default"  style="margin-right: 10px;" @click="handleUpdate(id)">编辑</a-button>
+        <a-button
+          type="default"
+          style="margin-right: 10px"
+          @click="handleUpdate(id)"
+          >编辑</a-button
+        >
+        <a-button
+          type="default"
+          style="margin-right: 10px"
+          @click="handleCreate(id)"
+          >新增子节点</a-button
+        >
+        <a-button
+          type="default"
+          style="margin-right: 10px"
+          @click="handleUpgrade(id)"
+          >升级</a-button
+        >
+        <a-button
+          type="default"
+          style="margin-right: 10px"
+          @click="handleDemote(id)"
+          >降级</a-button
+        >
       </span>
     </a-table>
     <a-drawer
@@ -69,7 +99,7 @@
         <a-col span="6"> <span>父级节点</span> </a-col>
         <a-col span="18">
           <a-select
-            v-model="form.parent"
+            v-model="form.parentId"
             style="width: 100%"
             :disabled="disabled"
           >
@@ -111,9 +141,9 @@ export default {
     return {
       visible: false,
       form: {
-        id: '',
+        id: "",
         title: "",
-        parent: "",
+        parentId: "",
       },
       columns: [
         {
@@ -128,7 +158,7 @@ export default {
         {
           title: "任务名称",
           key: "name",
-          width: 200,
+          width: 240,
           ellipsis: true,
           scopedSlots: { customRender: "name" },
         },
@@ -136,7 +166,7 @@ export default {
           title: "父任务",
           dataIndex: "parent",
           key: "parent",
-          width: 150,
+          width: 200,
           ellipsis: true,
           scopedSlots: { customRender: "parent" },
         },
@@ -219,7 +249,7 @@ export default {
     },
     clearForm() {
       this.form.title = "";
-      this.form.parent = "";
+      this.form.parentId = "";
     },
     handleDetail(id) {
       this.visible = true;
@@ -228,7 +258,7 @@ export default {
       GetTaskById(id)
         .then((res) => {
           this.form.title = res.data.title;
-          this.form.parent = res.data.parent_id;
+          this.form.parentId = res.data.parent_id;
         })
         .catch((err) => {
           this.$message.error("获取任务失败");
@@ -251,16 +281,55 @@ export default {
         .then((res) => {
           this.form.id = res.data.id;
           this.form.title = res.data.title;
-          this.form.parent = res.data.parent_id;
+          this.form.parentId = res.data.parent_id;
         })
         .catch((err) => {
           this.$message.error("获取任务失败");
         });
     },
-    handleCreate() {
+    handleCreate(id) {
       this.mode = 0;
       this.visible = true;
       this.disabled = false;
+      this.form.parentId = id;
+    },
+    handleUpgrade(id) {
+      const task = this.source.find((elem) => elem.id === id);
+      if (!task) {
+        return;
+      }
+      const parent = this.source.find((elem) => elem.objectId === task.parentId);
+      task.parentId = parent && parent.parentId || '';
+      UpdateTask(task)
+        .then(() => {
+          this.getAllTask();
+        })
+        .catch(() => {
+          this.$message.error("升级失败");
+        });
+    },
+    handleDemote(id) {
+      const index = this.source.findIndex((elem) => elem.id === id);
+      if (index === -1) {
+        return;
+      }
+      if (index === 0) {
+        return;
+      }
+      const brother = this.source[index - 1];
+      const current = this.source[index];
+      if (brother.parentId === current.parentId) {
+        current.parentId = brother.objectId;
+        UpdateTask(current)
+          .then(() => {
+            this.getAllTask();
+          })
+          .catch(() => {
+            this.$message.error("升级失败");
+          });
+      } else {
+        this.$message.error('当前节点不允许降级');
+      }
     },
     formatData(data) {
       const list = data.map((elem, index) => ({
