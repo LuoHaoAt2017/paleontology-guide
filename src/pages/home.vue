@@ -3,7 +3,13 @@
     <a-button-group style="padding: 10px 0px">
       <a-button @click="visible = true">新增</a-button>
     </a-button-group>
-    <a-table :columns="columns" :data-source="source" rowKey="id" bordered :scroll="{ y: 600 }">
+    <a-table
+      :columns="columns"
+      :data-source="source"
+      rowKey="id"
+      bordered
+      :scroll="{ y: 600 }"
+    >
       <span slot="name" slot-scope="gantt">
         {{ gantt }}
       </span>
@@ -22,7 +28,14 @@
         <a-button type="default" @click="handleEdit(id)">编辑</a-button>
       </span>
     </a-table>
-    <a-drawer :visible="visible" title="新增任" width="100%" :closable="false" class="add-drawer">
+    <a-drawer
+      :visible="visible"
+      title="新增任"
+      width="80%"
+      :closable="true"
+      @close="onCancel"
+      class="add-drawer"
+    >
       <a-row :gutter="[10, 20]">
         <a-col span="6"><span>任务名称</span></a-col>
         <a-col span="18"> <a-input v-model="form.title"> </a-input> </a-col>
@@ -51,7 +64,7 @@
 <script>
 import { CreateTask, GetAllTask, DeleteTask } from "../apis/index";
 import moment from "moment";
-import Tree from '../../libs';
+import Tree from "../../libs";
 export default {
   name: "Home",
   filters: {
@@ -144,15 +157,15 @@ export default {
     },
     handleEdit(id) {},
     formatData(data) {
-      const list = data.map(elem => ({
+      const list = data.map((elem) => ({
         objectId: elem.id,
         parentId: elem.parent_id,
-        ...elem
+        ...elem,
       }));
       const tree = new Tree(list);
       this.source = tree.getFlatData();
       console.table(this.source);
-    }
+    },
   },
   mounted() {
     this.getAllTask();

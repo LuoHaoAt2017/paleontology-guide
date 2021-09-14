@@ -1,4 +1,4 @@
-import Tree from '../libs/index';
+import Tree from '../../libs/index';
 
 const list = [
   {
@@ -36,10 +36,10 @@ const list = [
     name: '江夏区',
     parentId: '0011'
   },
-]
+];
 
-let tree = new Tree(list);
-let treeData = tree.getTreeData();
+const tree = new Tree(list);
+const treeData = tree.getTreeData();
 let flatData = tree.getFlatData();
 
 describe('树的构造测试', () => {
@@ -120,17 +120,7 @@ describe('节点层次测试', () => {
   });
 });
 
-describe('孩子节点测试', () => {
-  test('湖北省有孩子节点，孩子节点的数量是3。', () => {
-    expect(flatData[0].hasChild).toBeTruthy();
-    expect(flatData[0].children.length).toBe(3);
-  });
-
-  test('武汉市有孩子节点，孩子节点的数量是3。', () => {
-    expect(flatData[1].hasChild).toBeTruthy();
-    expect(flatData[1].children.length).toBe(3);
-  });
-
+describe('节点孩子节点测试', () => {
   test('武昌区没有孩子节点', () => {
     expect(flatData[2].hasChild).toBeFalsy();
   });
@@ -149,5 +139,23 @@ describe('孩子节点测试', () => {
 
   test('宜昌市没有孩子节点', () => {
     expect(flatData[6].hasChild).toBeFalsy();
+  });
+});
+
+describe('节点展开收缩测试', () => {
+  test('第一个节点时武汉市', () => {
+    expect(flatData[1].name).toEqual('武汉市');
+  });
+
+  test('武汉市节点收缩，扁平化之后数组长度是4', () => {
+    tree.setCollapse(flatData[1], true);
+    flatData = tree.getFlatData();
+    expect(flatData.length).toBe(4);
+  });
+
+  test('武汉市节点展开，扁平化之后数组长度是7', () => {
+    tree.setCollapse(flatData[1], false);
+    flatData = tree.getFlatData();
+    expect(flatData.length).toBe(7);
   });
 });
