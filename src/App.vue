@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <header>古生物漫游指南</header>
+    <header>古生物指南</header>
     <router-view></router-view>
   </div>
 </template>

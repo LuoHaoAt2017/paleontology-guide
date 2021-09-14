@@ -7,8 +7,8 @@
         <a-button @click="getAllTask" type="default" icon="reload">刷新</a-button>
       </a-button-group>
       <a-button-group>
-        <a-button :class="{active: viewmode === 0}" @click="viewmode = 0">树状视图</a-button>
-        <a-button :class="{active: viewmode === 1}" @click="viewmode = 1">列表视图</a-button>
+        <a-button :class="{active: viewmode === 0}" @click="viewmode = 0">列表视图</a-button>
+        <a-button :class="{active: viewmode === 1}" @click="viewmode = 1">树状视图</a-button>
         <a-button :class="{active: viewmode === 2}" @click="viewmode = 2">时间视图</a-button>
       </a-button-group>
     </div>
