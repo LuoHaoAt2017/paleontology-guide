@@ -2,7 +2,9 @@
   <div class="home">
     <div class="action">
       <a-button-group style="padding: 10px 0px">
-        <a-button @click="handleCreate('')" type="primary">新增</a-button>
+        <a-button @click="handleCreate('')" type="primary" icon="plus">
+          新增</a-button>
+        <a-button @click="getAllTask" type="default" icon="reload">刷新</a-button>
       </a-button-group>
       <a-button-group>
         <a-button :class="{active: viewmode === 0}" @click="viewmode = 0">树状视图</a-button>
@@ -15,7 +17,7 @@
       :columns="columns"
       :data-source="source"
       :pagination="false"
-      :bordered="false"
+      :bordered="true"
       :scroll="{
         y: scrollY
       }"
