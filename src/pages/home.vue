@@ -1,8 +1,15 @@
 <template>
   <div class="home">
-    <a-button-group style="padding: 10px 0px">
-      <a-button @click="handleCreate('')">新增</a-button>
-    </a-button-group>
+    <div class="action">
+      <a-button-group style="padding: 10px 0px">
+        <a-button @click="handleCreate('')" type="primary">新增</a-button>
+      </a-button-group>
+      <a-button-group>
+        <a-button :class="{active: viewmode === 0}" @click="viewmode = 0">树状视图</a-button>
+        <a-button :class="{active: viewmode === 1}" @click="viewmode = 1">列表视图</a-button>
+        <a-button :class="{active: viewmode === 2}" @click="viewmode = 2">时间视图</a-button>
+      </a-button-group>
+    </div>
     <a-table
       :columns="columns"
       :data-source="source"
@@ -195,6 +202,7 @@ export default {
       tree: null,
       mode: 0, // 新增,
       disabled: false,
+      viewmode: 0
     };
   },
   methods: {
@@ -298,8 +306,10 @@ export default {
       if (!task) {
         return;
       }
-      const parent = this.source.find((elem) => elem.objectId === task.parentId);
-      task.parentId = parent && parent.parentId || '';
+      const parent = this.source.find(
+        (elem) => elem.objectId === task.parentId
+      );
+      task.parentId = (parent && parent.parentId) || "";
       UpdateTask(task)
         .then(() => {
           this.getAllTask();
@@ -328,7 +338,7 @@ export default {
             this.$message.error("升级失败");
           });
       } else {
-        this.$message.error('当前节点不允许降级');
+        this.$message.error("当前节点不允许降级");
       }
     },
     formatData(data) {
@@ -371,6 +381,11 @@ export default {
 </style>
 <style lang="less" scoped>
 .home {
+  .action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .collapse {
     font-size: 12px;
     transform: scale(0.5, 0.5);
