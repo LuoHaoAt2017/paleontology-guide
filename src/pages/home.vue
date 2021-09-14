@@ -1,28 +1,36 @@
 <template>
   <div class="home">
     <a-button-group style="padding: 10px 0px">
-      <a-button @click="visible = true">新增</a-button>
+      <a-button @click="handleCreate">新增</a-button>
     </a-button-group>
     <a-table
       :columns="columns"
       :data-source="source"
       rowKey="id"
       bordered
-      :scroll="{ y: 600 }"
+      :scroll="{ y: 540 }"
     >
       <span slot="index" slot-scope="index">
-        {{ index }}
+        {{ index + 1 }}
       </span>
       <span slot="name" slot-scope="row">
-        <span class="indent" style="display: inline-block;"  :style="{width: (row.level * 20) + 'px'}"></span>
+        <span
+          class="indent"
+          style="display: inline-block"
+          :style="{ width: row.level * 20 + 'px' }"
+        ></span>
         <span v-if="row.hasChild" class="collapse">
-          <a-icon type="right" v-if="row.collapse" @click="onCollapse(row, false)"/>
-          <a-icon type="down" v-else @click="onCollapse(row, true)"/>
+          <a-icon
+            type="caret-right"
+            v-if="row.collapse"
+            @click="onCollapse(row, false)"
+          />
+          <a-icon type="caret-down" v-else @click="onCollapse(row, true)" />
         </span>
         <label>{{ row.title }}</label>
       </span>
       <span slot="parent" slot-scope="parent">
-        {{ (parent && parent.title) || "" }}
+        <a-button type="link" @click="handleDetail(parent.id)">{{ (parent && parent.title) || "" }}</a-button>
       </span>
       <span slot="create" slot-scope="create">
         {{ create | dateFormatter }}
@@ -31,9 +39,16 @@
         {{ update | dateFormatter }}
       </span>
       <span slot="operation" slot-scope="id">
-        <a-button type="primary" @click="handleView(id)">查看</a-button>
-        <a-button type="danger" @click="handleDelete(id)">删除</a-button>
-        <a-button type="default" @click="handleEdit(id)">编辑</a-button>
+        <a-button type="primary" @click="handleDetail(id)" style="margin-right: 10px;">查看</a-button>
+        <a-popconfirm
+          title="你确定要删除这条数据吗"
+          ok-text="确定"
+          cancel-text="取消"
+          @confirm="handleDelete(id)"
+        >
+          <a-button type="danger" style="margin-right: 10px;">删除</a-button>
+        </a-popconfirm>
+        <a-button type="default"  style="margin-right: 10px;" @click="handleUpdate(id)">编辑</a-button>
       </span>
     </a-table>
     <a-drawer
@@ -46,12 +61,18 @@
     >
       <a-row :gutter="[10, 20]">
         <a-col span="6"><span>任务名称</span></a-col>
-        <a-col span="18"> <a-input v-model="form.title"> </a-input> </a-col>
+        <a-col span="18">
+          <a-input :disabled="disabled" v-model="form.title"> </a-input>
+        </a-col>
       </a-row>
       <a-row :gutter="[10, 20]">
         <a-col span="6"> <span>父级节点</span> </a-col>
         <a-col span="18">
-          <a-select v-model="form.parent" style="width: 100%">
+          <a-select
+            v-model="form.parent"
+            style="width: 100%"
+            :disabled="disabled"
+          >
             <a-select-option
               v-for="(item, index) in source"
               :key="index"
@@ -70,7 +91,13 @@
   </div>
 </template>
 <script>
-import { CreateTask, GetAllTask, DeleteTask } from "../apis/index";
+import {
+  CreateTask,
+  GetAllTask,
+  DeleteTask,
+  UpdateTask,
+  GetTaskById,
+} from "../apis/index";
 import moment from "moment";
 import Tree from "../../libs";
 export default {
@@ -84,6 +111,7 @@ export default {
     return {
       visible: false,
       form: {
+        id: '',
         title: "",
         parent: "",
       },
@@ -92,9 +120,9 @@ export default {
           title: "序号",
           dataIndex: "index",
           key: "seq",
-          fixed: 'left',
+          fixed: "left",
           width: 80,
-          align: 'center',
+          align: "center",
           scopedSlots: { customRender: "index" },
         },
         {
@@ -116,14 +144,14 @@ export default {
           title: "创建时间",
           dataIndex: "createdAt",
           key: "create",
-          width: 200,
+          width: 180,
           scopedSlots: { customRender: "create" },
         },
         {
           title: "修改时间",
           dataIndex: "updatedAt",
           key: "update",
-          width: 200,
+          width: 180,
           scopedSlots: { customRender: "update" },
         },
         {
@@ -135,6 +163,8 @@ export default {
       ],
       source: [],
       tree: null,
+      mode: 0, // 新增,
+      disabled: false,
     };
   },
   methods: {
@@ -148,17 +178,40 @@ export default {
         });
     },
     onConfirm() {
-      CreateTask(this.form)
-        .then(() => {
-          this.getAllTask();
-        })
-        .catch((error) => {
-          console.error(error.message);
-        })
-        .finally(() => {
-          this.visible = false;
-          this.clearForm();
-        });
+      if (this.mode === 0) {
+        CreateTask(this.form)
+          .then(() => {
+            this.getAllTask();
+          })
+          .catch((error) => {
+            console.error(error.message);
+          })
+          .finally(() => {
+            this.visible = false;
+            this.clearForm();
+          });
+      } else if (this.mode === 1) {
+        const task = this.form;
+        UpdateTask(task)
+          .then(() => {
+            this.getAllTask();
+          })
+          .catch(() => {
+            this.$message.error("修改失败");
+          })
+          .finally(() => {
+            this.visible = false;
+            this.clearForm();
+          });
+      } else if (this.mode === 2) {
+        GetAllTask()
+          .then((res) => {
+            this.formatData(res.data);
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+      }
     },
     onCancel() {
       this.visible = false;
@@ -168,7 +221,19 @@ export default {
       this.form.title = "";
       this.form.parent = "";
     },
-    handleView(id) {},
+    handleDetail(id) {
+      this.visible = true;
+      this.mode = 2;
+      this.disabled = true;
+      GetTaskById(id)
+        .then((res) => {
+          this.form.title = res.data.title;
+          this.form.parent = res.data.parent_id;
+        })
+        .catch((err) => {
+          this.$message.error("获取任务失败");
+        });
+    },
     handleDelete(id) {
       DeleteTask(id)
         .then(() => {
@@ -178,7 +243,25 @@ export default {
           console.error(err.message);
         });
     },
-    handleEdit(id) {},
+    handleUpdate(id) {
+      this.visible = true;
+      this.mode = 1;
+      this.disabled = false;
+      GetTaskById(id)
+        .then((res) => {
+          this.form.id = res.data.id;
+          this.form.title = res.data.title;
+          this.form.parent = res.data.parent_id;
+        })
+        .catch((err) => {
+          this.$message.error("获取任务失败");
+        });
+    },
+    handleCreate() {
+      this.mode = 0;
+      this.visible = true;
+      this.disabled = false;
+    },
     formatData(data) {
       const list = data.map((elem, index) => ({
         objectId: elem.id,
@@ -193,7 +276,7 @@ export default {
       this.tree.setCollapse(node, collapsed);
       this.source = this.tree.getFlatData();
       console.table(this.source);
-    }
+    },
   },
   mounted() {
     this.getAllTask();
@@ -209,6 +292,11 @@ export default {
       bottom: 20px;
       right: 20px;
     }
+  }
+}
+.home {
+  .ant-table-tbody > tr > td {
+    padding: 8px 16px;
   }
 }
 </style>

@@ -10,6 +10,6 @@ export default {
 </script>
 <style lang="less">
 .app {
-  padding: 10px 10px;
+  padding: 0px 10px;
 }
 </style>

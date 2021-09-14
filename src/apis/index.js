@@ -24,3 +24,18 @@ export function DeleteTask(id) {
     }
   });
 }
+
+export function UpdateTask(task) {
+  return axios.request({
+    url: '/gantt',
+    method: 'PUT',
+    data: task
+  });
+}
+
+export function GetTaskById(id) {
+  return axios.request({
+    url: `/gantt?id=${id}`,
+    method: 'GET',
+  });
+}
