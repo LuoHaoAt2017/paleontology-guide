@@ -39,7 +39,12 @@
           />
           <a-icon type="caret-down" v-else @click="onCollapse(row, true)" />
         </span>
-        <label>{{ row.title }}</label>
+        <a-button
+          type="link"
+          @click="handleDetail(row.id)"
+          style="margin-right: 10px"
+          >{{ row.title }}</a-button
+        >
       </span>
       <span slot="parent" slot-scope="parent">
         <a-button type="link" @click="handleDetail(parent.id)">{{
@@ -53,41 +58,34 @@
         {{ update | dateFormatter }}
       </span>
       <span slot="operation" slot-scope="id">
-        <a-button
-          type="primary"
-          @click="handleDetail(id)"
-          style="margin-right: 10px"
-          >查看</a-button
-        >
         <a-popconfirm
           title="你确定要删除这条数据吗"
           ok-text="确定"
           cancel-text="取消"
           @confirm="handleDelete(id)"
         >
-          <a-button type="danger" style="margin-right: 10px">删除</a-button>
+          <a-button type="danger" style="margin-right: 5px">删除</a-button>
         </a-popconfirm>
         <a-button
-          type="default"
-          style="margin-right: 10px"
+          type="primary"
+          style="margin-right: 5px"
           @click="handleUpdate(id)"
           >编辑</a-button
         >
         <a-button
           type="default"
-          style="margin-right: 10px"
+          style="margin-right: 5px"
           @click="handleCreate(id)"
           >新增子节点</a-button
         >
         <a-button
           type="default"
-          style="margin-right: 10px"
+          style="margin-right: 5px"
           @click="handleUpgrade(id)"
           >升级</a-button
         >
         <a-button
           type="default"
-          style="margin-right: 10px"
           @click="handleDemote(id)"
           >降级</a-button
         >
@@ -364,10 +362,10 @@ export default {
     },
     setScrollY() {
       const height = document.querySelector('.home').getBoundingClientRect().height;
-      this.scrollY = height - 52 - 54;
+      this.scrollY = height - 54 - 54 - 20;
       window.addEventListener('resize', () => {
         const height = document.querySelector('.home').getBoundingClientRect().height;
-        this.scrollY = height - 54 - 54;
+        this.scrollY = height - 54 - 54 - 20;
       });
     }
   },
@@ -391,7 +389,6 @@ export default {
   }
 }
 .home {
-  height: 100%;
   .ant-table-tbody > tr > td {
     padding: 8px 16px;
   }
