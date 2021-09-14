@@ -17,7 +17,7 @@
       :pagination="false"
       :bordered="false"
       :scroll="{
-        y: 640
+        y: scrollY
       }"
     >
       <span slot="index" slot-scope="index">
@@ -205,7 +205,8 @@ export default {
       tree: null,
       mode: 0, // 新增,
       disabled: false,
-      viewmode: 0
+      viewmode: 0,
+      scrollY: 640
     };
   },
   methods: {
@@ -359,9 +360,20 @@ export default {
       this.source = this.tree.getFlatData();
       console.table(this.source);
     },
+    setScrollY() {
+      const height = document.querySelector('.home').getBoundingClientRect().height;
+      this.scrollY = height - 52 - 54;
+      window.addEventListener('resize', () => {
+        const height = document.querySelector('.home').getBoundingClientRect().height;
+        this.scrollY = height - 54 - 54;
+      });
+    }
+  },
+  created() {
+    this.getAllTask();
   },
   mounted() {
-    this.getAllTask();
+    this.setScrollY();
   },
 };
 </script>
@@ -377,6 +389,7 @@ export default {
   }
 }
 .home {
+  height: 100%;
   .ant-table-tbody > tr > td {
     padding: 8px 16px;
   }

@@ -10,6 +10,7 @@ export default {
 </script>
 <style lang="less">
 .app {
+  height: 100%;
   padding: 0px 10px;
 }
 </style>
