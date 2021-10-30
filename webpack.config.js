@@ -13,7 +13,6 @@ module.exports = {
   output: {
     filename: "[name].js",
     path: resolve("dist"),
-    // library: "luohao-tree-list",
     libraryTarget: "umd",
   },
   module: {
@@ -39,7 +38,6 @@ module.exports = {
   resolve: {
     alias: {
       "@": resolve("./src"),
-      "luohao-tree-list": resolve("./libs/luohao-tree-list.js"),
     },
     extensions: [".js", ".vue"],
   },
