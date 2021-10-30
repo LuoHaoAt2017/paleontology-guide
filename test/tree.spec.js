@@ -1,4 +1,4 @@
-import Tree from '../../libs/index';
+import Tree from '../libs/index';
 
 const list = [
   {

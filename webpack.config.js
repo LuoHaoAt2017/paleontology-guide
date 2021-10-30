@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const resolve = (param) => path.resolve(__dirname, param);
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -40,7 +41,7 @@ module.exports = {
       "@": resolve("./src"),
       "luohao-tree-list": resolve("./libs/luohao-tree-list.js"),
     },
-    extensions: [".js"],
+    extensions: [".js", ".vue"],
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -58,6 +59,21 @@ module.exports = {
       filename: "login.html",
       chunks: ['login']
     }),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
   ],
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        parallel: true
+      })
+    ],
+  },
+  externals: {
+    antd: "antd",
+    moment: "moment",
+    lodash: "lodash",
+    "vue": "Vue",
+    "vue-router": "VueRouter",
+    "vuex": "Vuex"
+  }
 };

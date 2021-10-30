@@ -1,8 +1,9 @@
 <template>
   <a-form-model
-    :model="form"
+    id="loginForm"
     layout="horizontal"
     class="form"
+    :model="form"
     @submit="handleLogin"
   >
     <a-form-model-item style="margin-top: 24px">
@@ -30,26 +31,6 @@ export default {
   name: "Login",
   data() {
     return {
-      users: [
-        {
-          label: "章鱼先生",
-          value: "000001",
-        },
-        {
-          label: "鳄鱼先生",
-          value: "000002",
-        },
-      ],
-      roles: [
-        {
-          label: "普通用户",
-          value: "user",
-        },
-        {
-          label: "管理员",
-          value: "admin",
-        },
-      ],
       form: {
         username: "",
         password: "",
