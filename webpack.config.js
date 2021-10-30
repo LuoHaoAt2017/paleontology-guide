@@ -7,11 +7,12 @@ const resolve = (param) => path.resolve(__dirname, param);
 module.exports = {
   entry: {
     index: resolve("src/index.js"),
+    login: resolve("modules/login/index.js"),
   },
   output: {
-    filename: "luohao-tree-list.js",
+    filename: "[name].js",
     path: resolve("dist"),
-    library: "luohao-tree-list",
+    // library: "luohao-tree-list",
     libraryTarget: "umd",
   },
   module: {
@@ -44,10 +45,18 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: "树形列表",
+      title: "古生物指南",
       template: resolve("./public/index.html"),
       favicon: resolve("./public/favicon.ico"),
       filename: "index.html",
+      chunks: ['index']
+    }),
+    new HtmlWebpackPlugin({
+      title: "古生物指南",
+      template: resolve("./public/index.html"),
+      favicon: resolve("./public/favicon.ico"),
+      filename: "login.html",
+      chunks: ['login']
     }),
     new VueLoaderPlugin()
   ],
