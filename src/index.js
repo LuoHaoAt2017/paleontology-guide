@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import router from './route';
+import router from './routes';
 import store from './store';
 import loginAuth from './utils/auth';
 import andt from "antd";

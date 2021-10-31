@@ -1,17 +1,31 @@
 <template>
   <div class="app">
     <header>
+      <a-icon type="zhihu" />
       <label>古生物指南</label>
       <a-badge :count="1">
-        <a-avatar shape="square" icon="user" />
+        <a-popover trigger="hover" placement="bottomLeft">
+          <template slot="title">
+            <label>{{ userInfo.username }}</label>
+          </template>
+          <template slot="content">
+            <p>Content</p>
+            <p>Content</p>
+          </template>
+          <a-avatar shape="square" icon="user" style="cursor:pointer;"/>
+        </a-popover>
       </a-badge>
     </header>
     <router-view></router-view>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 export default {
   name: "App",
+  computed: mapState({
+    userInfo: (state) => state.userInfo
+  })
 };
 </script>
 <style lang="less" scoped>

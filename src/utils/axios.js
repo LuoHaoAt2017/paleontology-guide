@@ -20,7 +20,7 @@ instance.interceptors.response.use(function(response) {
     setToken(response.data.token);
   }
   // 对响应数据做点什么
-  return response;
+  return response.data;
 }, function(error) {
   // 对响应错误做点什么
   if (error.response.status === 401) {
