@@ -60,7 +60,7 @@
           @click="handleUpdate(id)"
           >编辑</a-button
         >
-        <a-button
+        <!-- <a-button
           type="default"
           style="margin-right: 5px"
           @click="handleCreate(id)"
@@ -72,7 +72,7 @@
           @click="handleUpgrade(id)"
           >升级</a-button
         >
-        <a-button type="default" @click="handleDemote(id)">降级</a-button>
+        <a-button type="default" @click="handleDemote(id)">降级</a-button> -->
       </span>
     </a-table>
     <a-drawer

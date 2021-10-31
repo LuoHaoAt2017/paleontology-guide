@@ -65,6 +65,12 @@ export default {
     handleCreate() {},
     handleRefresh() {},
   },
+  mounted() {
+    const userId = this.$route.query.userId;
+    if (userId) {
+      this.$store.dispatch('GetUserAction', userId);
+    }
+  }
 };
 </script>
 <style lang="less">

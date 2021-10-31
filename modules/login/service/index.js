@@ -1,8 +1,8 @@
 import fetch from '@/utils/axios';
 
-export function loginByPassWord(params) {
+export function Login(params) {
   return fetch.request({
-    url: '/loginByPassword',
+    url: '/login',
     method: 'POST',
     data: {
       username: params.username,
@@ -11,13 +11,20 @@ export function loginByPassWord(params) {
   });
 }
 
-export function loginByScanCode(params) {
+export function Logout(params) {
   return fetch.request({
-    url: '/loginByScancode',
-    method: 'POST',
+    url: `'/logout/userId=${params}'`,
+    method: 'GET',
+  });
+}
+
+export function Register(params) {
+  return fetch.request({
+    url: '/register',
+    method: 'PUT',
     data: {
       username: params.username,
-      password: params.scancode,
+      password: params.password,
     },
   });
 }

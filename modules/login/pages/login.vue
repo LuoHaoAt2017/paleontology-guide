@@ -27,13 +27,14 @@
   </a-form-model>
 </template>
 <script>
+import { message } from 'antd';
 export default {
   name: "Login",
   data() {
     return {
       form: {
-        username: "",
-        password: "",
+        username: "luohao",
+        password: "12345",
       },
     };
   },
@@ -44,7 +45,15 @@ export default {
   },
   methods: {
     handleLogin() {
-      window.location.href = "index.html";
+      this.$store.dispatch('LoginAction', {
+        username: this.form.username,
+        password: this.form.password,
+      }).then((resp) => {
+        message.success(resp.mesg);
+        window.location.href = `index.html#/home?userId=${resp.data.id}`;
+      }).catch((err) => {
+        message.error(err.message);
+      });
     },
     handleRegister() {
       this.$router.replace({
@@ -52,9 +61,12 @@ export default {
       });
     },
   },
+  created() {
+    this.form.username = this.$route.query.username || 'luohao';
+  }
 };
 </script>
 <style lang="less" scoped>
-form {
+.form {
 }
 </style>

@@ -13,5 +13,5 @@ module.exports = {
   transformIgnorePatterns: [
     "/node_modules/",
   ],
-  watchman: true,
+  watchman: false,
 };

@@ -1,12 +1,20 @@
 const router = require('express').Router();
-const Gantt = require('../controllers/gantt');
+const GanttController = require('../controllers/gantt');
+const LoginController = require('../controllers/login');
+const UsersController = require('../controllers/users');
 
-router.get('/gantt', Gantt.search);
+router.post('/login', LoginController.login);
 
-router.put('/gantt', Gantt.update);
+router.put('/register', LoginController.register);
 
-router.post('/gantt', Gantt.create);
+router.get('/user', UsersController.getUserById);
 
-router.delete('/gantt', Gantt.remove);
+router.get('/listview', GanttController.search);
+
+router.put('/listview', GanttController.update);
+
+router.post('/listview', GanttController.create);
+
+router.delete('/listview', GanttController.remove);
 
 module.exports = router;

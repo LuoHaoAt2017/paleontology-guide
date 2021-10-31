@@ -4,7 +4,7 @@
   "description": "古生物指南",
   "main": "dist/paleontology-guide.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "build": "webpack --config webpack.config.prod.js",
     "start": "webpack-dev-server --config webpack.config.dev.js",
     "serve": "nodemon --inspect ./server/index.js",
@@ -55,9 +55,14 @@
   "dependencies": {
     "@antv/g6": "^4.3.11",
     "axios": "^0.21.4",
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "express-jwt": "^6.1.0",
+    "js-cookie": "^3.0.1",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.0",
-    "sequelize": "^5.22.4"
+    "sequelize": "^5.22.4",
+    "uuid": "^8.3.2"
   },
   "husky": {
     "hooks": {

@@ -11,8 +11,8 @@ const sequelize = new Sequelize(database, username, password, {
   dialect: 'mysql',
 });
 
-class Gantt extends Model {
-}
+// ============================================
+class Gantt extends Model {}
 
 Gantt.init({
   // 在这里定义模型属性
@@ -43,8 +43,39 @@ Gantt.belongsTo(Gantt, {
   },
   as: 'parent',
 });
+// ============================================
+class Users extends Model {}
+
+Users.init({
+  id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    primaryKey: true,
+    defaultValue: Sequelize.UUIDV4
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: 'user'
+  },
+}, {
+  sequelize: sequelize,
+  modelName: 'Users',
+  tableName: 'Users',
+});
 
 models.Gantt = Gantt;
+models.Users = Users;
 
 (async function () {
   try {

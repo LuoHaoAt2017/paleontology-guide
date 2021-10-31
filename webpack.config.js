@@ -67,9 +67,9 @@ module.exports = {
     ],
   },
   externals: {
-    antd: "antd",
-    moment: "moment",
-    lodash: "lodash",
+    "antd": "antd",
+    "moment": "moment",
+    "lodash": "_",
     "vue": "Vue",
     "vue-router": "VueRouter",
     "vuex": "Vuex"

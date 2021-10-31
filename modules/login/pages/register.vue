@@ -10,6 +10,11 @@
         <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
       </a-input>
     </a-form-model-item>
+    <!-- <a-form-model-item>
+      <a-input v-model="form.birthday" size="large">
+        <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
+      </a-input>
+    </a-form-model-item> -->
     <a-form-model-item>
       <a-button-group size="large">
         <a-button html-type="submit" type="primary" :disabled="disabled">注册</a-button>
@@ -19,6 +24,7 @@
   </a-form-model>
 </template>
 <script>
+import { message } from 'antd';
 export default {
   name: "Register",
   data() {
@@ -26,6 +32,11 @@ export default {
       form: {
         username: "",
         password: "",
+        // birthday: "",
+        // location: "",
+        // email: "",
+        // gender: 0,
+        // photo: ""
       },
     };
   },
@@ -41,9 +52,18 @@ export default {
       });
     },
     handleRegister() {
-      this.$router.replace({
-        name: 'Login',
-        params: {}
+      const params = Object.assign({}, this.form);
+      this.$store.dispatch('RegisterAction', params).then((resp) => {
+        message.success(resp.mesg);
+        this.$router.replace({
+          name: 'Login',
+          query: {
+            useruuid: resp.data.id,
+            username: resp.data.username
+          }
+        });
+      }).catch((err) => {
+        message.error(err.message);
       });
     },
   },
