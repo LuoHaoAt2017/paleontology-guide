@@ -343,21 +343,12 @@ export default {
       this.tree.setCollapse(node, collapsed);
       this.source = this.tree.getFlatData();
       console.table(this.source);
-    },
-    setScrollY() {
-      const height = document.querySelector(".home").getBoundingClientRect().height;
-      this.scrollY = height - 54 - 54 - 20;
-      window.addEventListener("resize", () => {
-        const height = document.querySelector(".home").getBoundingClientRect().height;
-        this.scrollY = height - 54 - 54 - 20;
-      });
-    },
+    }
   },
   created() {
     this.getAllTask();
   },
   mounted() {
-    this.setScrollY();
   },
 };
 </script>

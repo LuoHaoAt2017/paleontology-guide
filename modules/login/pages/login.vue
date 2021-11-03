@@ -49,8 +49,7 @@ export default {
         username: this.form.username,
         password: this.form.password,
       }).then((resp) => {
-        message.success(resp.mesg);
-        window.location.href = `index.html#/home?userId=${resp.data.id}`;
+        window.location.href = `index.html#/home?userId=${resp.id}`;
       }).catch((err) => {
         message.error(err.message);
       });

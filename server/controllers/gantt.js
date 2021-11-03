@@ -46,7 +46,9 @@ module.exports = {
         const list = await Gantt.findAll({
           include: 'parent'
         });
-        res.status(200).send(list);
+        res.status(200).send({
+          data: list
+        });
       }
     } catch(error) {
       res.status(500).send(error.message);

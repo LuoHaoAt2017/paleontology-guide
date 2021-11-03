@@ -1,7 +1,6 @@
-数据分层
-- 树形结构数据
-- 线性结构数据
+- jest-puppeteer
+- jest-environment-puppeteer
 
-新增，删除，移动节点，操作的是树形结构数据。
-然后重新扁平化树形结构数据得到线性结构数据。
-表格的展示使用线性结构数据。
+- expect-puppeteer
+编写集成测试可以使用 Puppeteer API 来完成，但它可能既复杂又困难。
+Puppeteer API 很棒，但它是低级的，不是为集成测试而设计的。
